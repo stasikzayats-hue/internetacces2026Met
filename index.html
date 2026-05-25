@@ -7,501 +7,154 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #1a1a24;
-    --border: #2a2a3a;
-    --text: #e8e8f0;
-    --muted: #6a6a8a;
-    --accent-red: #ff3b3b;
-    --accent-amber: #f59e0b;
-    --accent-cyan: #06b6d4;
-    --accent-green: #10b981;
-    --china-red: #de2910;
-    --iran-green: #239f40;
-    --russia-blue: #1b4fd8;
+    --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24; --border: #2a2a3a;
+    --text: #e8e8f0; --muted: #6a6a8a; --accent-red: #ff3b3b;
+    --accent-amber: #f59e0b; --accent-cyan: #06b6d4; --accent-green: #10b981;
+    --china-red: #de2910; --iran-green: #239f40; --russia-blue: #1b4fd8;
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
+  * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; font-weight:300; overflow-x:hidden; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-  }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,15,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:.85rem 2rem; display:flex; align-items:center; gap:1.5rem; }
+  .nav-logo { font-family:'Space Mono',monospace; font-size:.7rem; color:var(--accent-red); letter-spacing:.15em; text-transform:uppercase; white-space:nowrap; }
+  .nav-links { display:flex; gap:1.25rem; margin-left:auto; flex-wrap:wrap; }
+  .nav-links a { font-family:'Space Mono',monospace; font-size:.6rem; color:var(--muted); text-decoration:none; letter-spacing:.1em; text-transform:uppercase; transition:color .2s; }
+  .nav-links a:hover { color:var(--text); }
 
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem;
-    display: flex; align-items: center; gap: 2rem;
-  }
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: .75rem;
-    color: var(--accent-red);
-    letter-spacing: .15em;
-    text-transform: uppercase;
-  }
-  .nav-links { display: flex; gap: 1.5rem; margin-left: auto; }
-  .nav-links a {
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    transition: color .2s;
-  }
-  .nav-links a:hover { color: var(--text); }
+  .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:8rem 4rem 4rem; position:relative; overflow:hidden; }
+  .hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(255,59,59,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,59,59,.04) 1px,transparent 1px); background-size:40px 40px; animation:gridScroll 20s linear infinite; }
+  @keyframes gridScroll { from{background-position:0 0} to{background-position:40px 40px} }
+  .hero-noise { position:absolute; inset:0; background:radial-gradient(ellipse at 20% 50%,rgba(222,41,16,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(6,182,212,.08) 0%,transparent 50%); pointer-events:none; }
+  .hero-eyebrow { font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.25em; color:var(--accent-red); text-transform:uppercase; margin-bottom:1.5rem; opacity:0; animation:fadeUp .8s .2s forwards; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(3rem,8vw,7rem); font-weight:900; line-height:.95; letter-spacing:-.02em; max-width:800px; opacity:0; animation:fadeUp .8s .4s forwards; }
+  .hero h1 em { font-style:normal; color:var(--accent-red); }
+  .hero-sub { max-width:520px; margin-top:2rem; font-size:1.05rem; line-height:1.7; color:var(--muted); opacity:0; animation:fadeUp .8s .6s forwards; }
+  .hero-stats { display:flex; gap:3rem; margin-top:3.5rem; opacity:0; animation:fadeUp .8s .8s forwards; flex-wrap:wrap; }
+  .stat { display:flex; flex-direction:column; gap:.3rem; }
+  .stat-num { font-family:'Space Mono',monospace; font-size:2rem; font-weight:700; }
+  .stat-label { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+  .scroll-cue { position:absolute; bottom:2.5rem; left:4rem; font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:.75rem; opacity:0; animation:fadeIn 1s 1.4s forwards; }
+  .scroll-cue::before { content:''; display:block; width:1px; height:48px; background:linear-gradient(to bottom,transparent,var(--muted)); animation:scrollLine 2s 1.4s infinite; }
+  @keyframes scrollLine { 0%,100%{opacity:.3} 50%{opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-  /* ─── HERO ─── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 8rem 4rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,59,59,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,59,59,.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridScroll 20s linear infinite;
-  }
-  @keyframes gridScroll {
-    from { background-position: 0 0; }
-    to { background-position: 40px 40px; }
-  }
-  .hero-noise {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 20% 50%, rgba(222,41,16,.12) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(6,182,212,.08) 0%, transparent 50%);
-    pointer-events: none;
-  }
-  .hero-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem;
-    letter-spacing: .25em;
-    color: var(--accent-red);
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp .8s .2s forwards;
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 8vw, 7rem);
-    font-weight: 900;
-    line-height: .95;
-    letter-spacing: -.02em;
-    max-width: 800px;
-    opacity: 0;
-    animation: fadeUp .8s .4s forwards;
-  }
-  .hero h1 em { font-style: normal; color: var(--accent-red); }
-  .hero-sub {
-    max-width: 520px;
-    margin-top: 2rem;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--muted);
-    opacity: 0;
-    animation: fadeUp .8s .6s forwards;
-  }
-  .hero-stats {
-    display: flex; gap: 3rem;
-    margin-top: 3.5rem;
-    opacity: 0;
-    animation: fadeUp .8s .8s forwards;
-  }
-  .stat { display: flex; flex-direction: column; gap: .3rem; }
-  .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .scroll-cue {
-    position: absolute; bottom: 2.5rem; left: 4rem;
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex; align-items: center; gap: .75rem;
-    opacity: 0;
-    animation: fadeIn 1s 1.4s forwards;
-  }
-  .scroll-cue::before {
-    content: '';
-    display: block; width: 1px; height: 48px;
-    background: linear-gradient(to bottom, transparent, var(--muted));
-    animation: scrollLine 2s 1.4s infinite;
-  }
-  @keyframes scrollLine {
-    0%, 100% { opacity: .3; } 50% { opacity: 1; }
-  }
+  section { padding:6rem 4rem; }
+  .section-label { font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-bottom:3rem; display:flex; align-items:center; gap:1rem; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:700; line-height:1.1; margin-bottom:1rem; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
+  #how { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .mechanism-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5px; background:var(--border); border:1px solid var(--border); margin-top:3rem; border-radius:4px; overflow:hidden; }
+  .mechanism-card { background:var(--surface); padding:2rem 1.75rem; transition:background .25s; position:relative; overflow:hidden; }
+  .mechanism-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent-red); transform:scaleX(0); transition:transform .3s; transform-origin:left; }
+  .mechanism-card:hover { background:var(--surface2); }
+  .mechanism-card:hover::before { transform:scaleX(1); }
+  .mech-icon { font-size:1.75rem; margin-bottom:1rem; }
+  .mech-title { font-family:'Space Mono',monospace; font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.75rem; color:var(--text); }
+  .mech-desc { font-size:.9rem; line-height:1.65; color:var(--muted); }
 
-  /* ─── SECTION SHARED ─── */
-  section { padding: 6rem 4rem; }
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 3rem;
-    display: flex; align-items: center; gap: 1rem;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1; height: 1px;
-    background: var(--border);
-  }
-  h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
+  .country-section { padding:6rem 4rem; position:relative; overflow:hidden; }
+  .country-bg { position:absolute; inset:0; opacity:.04; font-size:22vw; font-family:'Playfair Display',serif; font-weight:900; display:flex; align-items:center; justify-content:flex-end; padding-right:2rem; pointer-events:none; line-height:1; color:white; user-select:none; }
+  .country-header { display:flex; align-items:flex-start; gap:2rem; margin-bottom:3rem; }
+  .country-flag { font-size:3.5rem; line-height:1; flex-shrink:0; }
+  .country-name { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; line-height:1; margin-bottom:.4rem; }
+  .country-tagline { font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; }
+  .country-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+  .country-desc { font-size:1rem; line-height:1.8; color:#b0b0c8; margin-bottom:1.25rem; }
+  .blocked-list { display:flex; flex-direction:column; gap:.5rem; }
+  .blocked-item { display:flex; align-items:center; gap:.75rem; padding:.6rem 1rem; background:rgba(255,59,59,.06); border:1px solid rgba(255,59,59,.12); border-radius:3px; font-family:'Space Mono',monospace; font-size:.73rem; color:var(--muted); transition:border-color .2s,color .2s; }
+  .blocked-item:hover { border-color:rgba(255,59,59,.35); color:var(--text); }
+  .blocked-dot { width:6px; height:6px; border-radius:50%; background:var(--accent-red); flex-shrink:0; }
+  .fact-cards { display:flex; flex-direction:column; gap:1rem; }
+  .fact-card { padding:1.25rem 1.5rem; border-left:3px solid; background:var(--surface); }
+  .fact-card p { font-size:.875rem; line-height:1.65; color:#b0b0c8; }
+  .fact-card strong { display:block; font-family:'Space Mono',monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.4rem; color:var(--text); }
 
-  /* ─── HOW IT WORKS ─── */
-  #how {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .mechanism-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-top: 3rem;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .mechanism-card {
-    background: var(--surface);
-    padding: 2rem 1.75rem;
-    transition: background .25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .mechanism-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent-red);
-    transform: scaleX(0);
-    transition: transform .3s;
-    transform-origin: left;
-  }
-  .mechanism-card:hover { background: var(--surface2); }
-  .mechanism-card:hover::before { transform: scaleX(1); }
-  .mech-icon {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-  }
-  .mech-title {
-    font-family: 'Space Mono', monospace;
-    font-size: .8rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    margin-bottom: .75rem;
-    color: var(--text);
-  }
-  .mech-desc {
-    font-size: .9rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
+  sup.cite { font-family:'Space Mono',monospace; font-size:.55rem; color:var(--accent-amber); cursor:default; margin-left:1px; }
 
-  /* ─── COUNTRY SECTIONS ─── */
-  .country-section {
-    padding: 6rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .country-bg {
-    position: absolute; inset: 0;
-    opacity: .04;
-    font-size: 22vw;
-    font-family: 'Playfair Display', serif;
-    font-weight: 900;
-    display: flex; align-items: center; justify-content: flex-end;
-    padding-right: 2rem;
-    pointer-events: none;
-    line-height: 1;
-    color: white;
-    user-select: none;
-  }
-  .country-header {
-    display: flex; align-items: flex-start; gap: 2rem;
-    margin-bottom: 3rem;
-  }
-  .country-flag {
-    font-size: 3.5rem;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  .country-meta {}
-  .country-name {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: .4rem;
-  }
-  .country-tagline {
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-  }
-  .country-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
-  }
-  @media (max-width: 720px) {
-    .country-layout { grid-template-columns: 1fr; }
-    nav .nav-links { display: none; }
-    .hero { padding: 6rem 1.5rem 3rem; }
-    section { padding: 4rem 1.5rem; }
-    .country-section { padding: 4rem 1.5rem; }
-    .hero-stats { flex-wrap: wrap; gap: 2rem; }
-  }
-  .country-desc {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #b0b0c8;
-    margin-bottom: 2rem;
-  }
-  .blocked-list {
-    display: flex; flex-direction: column; gap: .5rem;
-  }
-  .blocked-item {
-    display: flex; align-items: center; gap: .75rem;
-    padding: .6rem 1rem;
-    background: rgba(255,59,59,.06);
-    border: 1px solid rgba(255,59,59,.12);
-    border-radius: 3px;
-    font-family: 'Space Mono', monospace;
-    font-size: .75rem;
-    color: var(--muted);
-    transition: border-color .2s, color .2s;
-  }
-  .blocked-item:hover { border-color: rgba(255,59,59,.35); color: var(--text); }
-  .blocked-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent-red); flex-shrink: 0;
-  }
-  .fact-cards { display: flex; flex-direction: column; gap: 1rem; }
-  .fact-card {
-    padding: 1.25rem 1.5rem;
-    border-left: 3px solid;
-    background: var(--surface);
-  }
-  .fact-card p {
-    font-size: .9rem;
-    line-height: 1.65;
-    color: #b0b0c8;
-  }
-  .fact-card strong {
-    display: block;
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    margin-bottom: .4rem;
-    color: var(--text);
-  }
+  #china { background:#0d0a0a; border-top:1px solid var(--border); }
+  #china .country-tagline { color:var(--china-red); }
+  #china .fact-card { border-color:var(--china-red); }
+  #china .country-name { color:var(--china-red); }
+  #iran { background:#0a0d0a; border-top:1px solid var(--border); }
+  #iran .country-tagline { color:var(--iran-green); }
+  #iran .fact-card { border-color:var(--iran-green); }
+  #iran .country-name { color:var(--iran-green); }
+  #russia { background:#0a0a0d; border-top:1px solid var(--border); }
+  #russia .country-tagline { color:var(--russia-blue); }
+  #russia .fact-card { border-color:var(--russia-blue); }
+  #russia .country-name { color:var(--russia-blue); }
 
-  /* ─── CHINA ─── */
-  #china { background: #0d0a0a; border-top: 1px solid var(--border); }
-  #china .country-tagline { color: var(--china-red); }
-  #china .fact-card { border-color: var(--china-red); }
-  #china .country-name { color: var(--china-red); }
+  .score-box { margin-top:2rem; padding:1.25rem 1.5rem; border-radius:3px; }
 
-  /* ─── IRAN ─── */
-  #iran { background: #0a0d0a; border-top: 1px solid var(--border); }
-  #iran .country-tagline { color: var(--iran-green); }
-  #iran .fact-card { border-color: var(--iran-green); }
-  #iran .country-name { color: var(--iran-green); }
+  #resistance { background:var(--surface); border-top:1px solid var(--border); }
+  .resistance-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-top:2.5rem; }
+  .resistance-card { padding:1.75rem; border:1px solid var(--border); border-radius:4px; background:var(--bg); transition:border-color .25s; }
+  .resistance-card:hover { border-color:var(--accent-green); }
+  .resistance-icon { font-size:1.5rem; margin-bottom:.75rem; }
+  .resistance-title { font-family:'Space Mono',monospace; font-size:.73rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:.6rem; color:var(--accent-green); }
+  .resistance-desc { font-size:.875rem; line-height:1.65; color:var(--muted); }
 
-  /* ─── RUSSIA ─── */
-  #russia { background: #0a0a0d; border-top: 1px solid var(--border); }
-  #russia .country-tagline { color: var(--russia-blue); }
-  #russia .fact-card { border-color: var(--russia-blue); }
-  #russia .country-name { color: var(--russia-blue); }
+  #upstanders { border-top:1px solid var(--border); }
+  .upstander-intro { font-size:1rem; line-height:1.75; color:var(--muted); max-width:600px; margin-bottom:2.5rem; }
+  .upstander-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+  .upstander-card { background:var(--surface); border:1px solid var(--border); border-radius:4px; overflow:hidden; transition:border-color .25s,transform .25s; }
+  .upstander-card:hover { border-color:var(--accent-amber); transform:translateY(-3px); }
+  .upstander-header { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:1rem; }
+  .upstander-avatar { width:44px; height:44px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+  .upstander-name { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; }
+  .upstander-role { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-amber); }
+  .upstander-body { padding:1.25rem 1.5rem; display:flex; flex-direction:column; gap:1rem; }
+  .upstander-row { display:flex; gap:.75rem; }
+  .upstander-row-label { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); min-width:70px; padding-top:.15rem; flex-shrink:0; }
+  .upstander-row-val { font-size:.875rem; line-height:1.6; color:#b0b0c8; }
 
-  /* ─── COMPARISON TABLE ─── */
-  #compare { background: var(--surface); border-top: 1px solid var(--border); }
-  .compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 2.5rem;
-    font-size: .875rem;
-  }
-  .compare-table th {
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: left;
-    padding: .75rem 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .compare-table td {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(42,42,58,.5);
-    color: #b0b0c8;
-    line-height: 1.5;
-    vertical-align: top;
-  }
-  .compare-table tr:hover td { background: rgba(255,255,255,.02); }
-  .compare-table .country-col {
-    font-family: 'Space Mono', monospace;
-    font-size: .75rem;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .tag {
-    display: inline-block;
-    padding: .2rem .5rem;
-    border-radius: 2px;
-    font-family: 'Space Mono', monospace;
-    font-size: .6rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    margin: .15rem .15rem .15rem 0;
-  }
-  .tag-red { background: rgba(255,59,59,.12); color: #ff7070; border: 1px solid rgba(255,59,59,.2); }
-  .tag-amber { background: rgba(245,158,11,.12); color: #fbbf24; border: 1px solid rgba(245,158,11,.2); }
-  .tag-blue { background: rgba(27,79,216,.15); color: #6b9fff; border: 1px solid rgba(27,79,216,.25); }
-  .tag-green { background: rgba(35,159,64,.12); color: #4ade80; border: 1px solid rgba(35,159,64,.2); }
+  #compare { background:var(--surface); border-top:1px solid var(--border); }
+  .compare-table { width:100%; border-collapse:collapse; margin-top:2.5rem; font-size:.875rem; }
+  .compare-table th { font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); text-align:left; padding:.75rem 1rem; border-bottom:1px solid var(--border); }
+  .compare-table td { padding:1rem; border-bottom:1px solid rgba(42,42,58,.5); color:#b0b0c8; line-height:1.5; vertical-align:top; }
+  .compare-table tr:hover td { background:rgba(255,255,255,.02); }
+  .compare-table .country-col { font-family:'Space Mono',monospace; font-size:.75rem; font-weight:700; white-space:nowrap; }
+  .tag { display:inline-block; padding:.2rem .5rem; border-radius:2px; font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; margin:.15rem .15rem .15rem 0; }
+  .tag-red { background:rgba(255,59,59,.12); color:#ff7070; border:1px solid rgba(255,59,59,.2); }
+  .tag-amber { background:rgba(245,158,11,.12); color:#fbbf24; border:1px solid rgba(245,158,11,.2); }
+  .tag-blue { background:rgba(27,79,216,.15); color:#6b9fff; border:1px solid rgba(27,79,216,.25); }
+  .tag-green { background:rgba(35,159,64,.12); color:#4ade80; border:1px solid rgba(35,159,64,.2); }
 
-  /* ─── WHAT YOU CAN DO ─── */
-  #action { border-top: 1px solid var(--border); }
-  .action-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2.5rem;
-  }
-  .action-card {
-    padding: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--surface);
-    transition: border-color .25s, transform .25s;
-  }
-  .action-card:hover { border-color: var(--accent-cyan); transform: translateY(-3px); }
-  .action-num {
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    color: var(--accent-cyan);
-    letter-spacing: .15em;
-    margin-bottom: 1rem;
-  }
-  .action-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: .75rem;
-  }
-  .action-desc {
-    font-size: .9rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
+  #action { border-top:1px solid var(--border); }
+  .action-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-top:2.5rem; }
+  .action-card { padding:2rem; border:1px solid var(--border); border-radius:4px; background:var(--surface); transition:border-color .25s,transform .25s; }
+  .action-card:hover { border-color:var(--accent-cyan); transform:translateY(-3px); }
+  .action-num { font-family:'Space Mono',monospace; font-size:.65rem; color:var(--accent-cyan); letter-spacing:.15em; margin-bottom:1rem; }
+  .action-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; margin-bottom:.75rem; }
+  .action-desc { font-size:.9rem; line-height:1.65; color:var(--muted); }
 
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 3rem 4rem;
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 1rem;
-  }
-  .footer-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem;
-    color: var(--muted);
-    letter-spacing: .15em;
-  }
-  .footer-note {
-    font-size: .8rem;
-    color: var(--muted);
-    max-width: 400px;
-  }
+  #works-cited { background:var(--surface); border-top:1px solid var(--border); }
+  .citation-list { list-style:none; display:flex; flex-direction:column; gap:1.25rem; margin-top:2rem; }
+  .citation-list li { display:flex; gap:1rem; font-size:.85rem; line-height:1.75; color:#9090b0; }
+  .citation-num { font-family:'Space Mono',monospace; font-size:.7rem; color:var(--accent-amber); min-width:28px; flex-shrink:0; padding-top:.1rem; }
+  .citation-scope { font-size:.78rem; color:var(--muted); display:block; margin-top:.3rem; font-style:italic; }
 
-  /* ─── PROGRESS BAR ─── */
-  .progress-bar {
-    position: fixed; top: 0; left: 0; height: 2px;
-    background: var(--accent-red);
-    z-index: 200;
-    width: 0%;
-    transition: width .1s linear;
-  }
+  footer { padding:3rem 4rem; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+  .footer-logo { font-family:'Space Mono',monospace; font-size:.7rem; color:var(--muted); letter-spacing:.15em; }
+  .footer-note { font-size:.8rem; color:var(--muted); max-width:420px; }
+  .progress-bar { position:fixed; top:0; left:0; height:2px; background:var(--accent-red); z-index:200; width:0%; transition:width .1s linear; }
 
-  /* ─── QUOTE BLOCK ─── */
-  .pullquote {
-    border-left: 4px solid var(--accent-amber);
-    padding: 1.5rem 2rem;
-    margin: 2rem 0;
-    background: rgba(245,158,11,.04);
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-style: italic;
-    line-height: 1.6;
-    color: var(--text);
-  }
-  .pullquote cite {
-    display: block;
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    font-style: normal;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: .75rem;
+  .pullquote { border-left:4px solid var(--accent-amber); padding:1.5rem 2rem; margin:1.5rem 0; background:rgba(245,158,11,.04); font-family:'Playfair Display',serif; font-size:1.1rem; font-style:italic; line-height:1.6; color:var(--text); }
+  .pullquote cite { display:block; font-family:'Space Mono',monospace; font-size:.65rem; font-style:normal; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:.75rem; }
+
+  @media(max-width:720px) {
+    .country-layout { grid-template-columns:1fr; }
+    nav .nav-links { display:none; }
+    .hero,.country-section { padding:6rem 1.5rem 3rem; }
+    section { padding:4rem 1.5rem; }
   }
 </style>
 </head>
 <body>
-
 <div class="progress-bar" id="progress"></div>
-
 <nav>
   <div class="nav-logo">// Digital Wall</div>
   <div class="nav-links">
@@ -509,8 +162,11 @@
     <a href="#china">China</a>
     <a href="#iran">Iran</a>
     <a href="#russia">Russia</a>
+    <a href="#resistance">Resistance</a>
+    <a href="#upstanders">Upstanders</a>
     <a href="#compare">Compare</a>
     <a href="#action">Take Action</a>
+    <a href="#works-cited">Sources</a>
   </div>
 </nav>
 
@@ -525,58 +181,56 @@
   </p>
   <div class="hero-stats">
     <div class="stat">
-      <span class="stat-num">3.5B</span>
-      <span class="stat-label">People under heavy censorship</span>
+      <span class="stat-num">1.09B</span>
+      <span class="stat-label">Internet users in China alone <sup class="cite">[1]</sup></span>
     </div>
     <div class="stat">
       <span class="stat-num">72</span>
-      <span class="stat-label">Countries restrict social media</span>
+      <span class="stat-label">Countries restrict social media <sup class="cite">[2]</sup></span>
     </div>
     <div class="stat">
-      <span class="stat-num">#1</span>
-      <span class="stat-label">China — most restrictive internet</span>
+      <span class="stat-num">10 days</span>
+      <span class="stat-label">Iran's Jan. 2026 total blackout <sup class="cite">[3]</sup></span>
     </div>
   </div>
   <div class="scroll-cue">Scroll to explore</div>
 </section>
 
-<!-- HOW CENSORSHIP WORKS -->
+<!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label">01 — Mechanisms</div>
   <h2>How Governments<br>Censor the Internet</h2>
-  <p style="color:var(--muted);max-width:580px;margin-top:.75rem;line-height:1.7">
-    Internet censorship isn't a single switch — it's a layered system of technical, legal, and social controls working together.
-  </p>
+  <p style="color:var(--muted);max-width:580px;margin-top:.75rem;line-height:1.7">Internet censorship isn't a single switch — it's a layered system of technical, legal, and social controls working together.</p>
   <div class="mechanism-grid">
     <div class="mechanism-card">
       <div class="mech-icon">🔒</div>
       <div class="mech-title">IP Blocking</div>
-      <div class="mech-desc">Governments instruct ISPs to block traffic to specific IP addresses, making entire services unreachable at the network level.</div>
+      <div class="mech-desc">Governments instruct ISPs to block traffic to specific IP addresses. All Chinese internet traffic must pass through state-controlled gateways overseen by the Ministry of Industry and Information Technology. <sup class="cite">[1]</sup></div>
     </div>
     <div class="mechanism-card">
       <div class="mech-icon">🔍</div>
       <div class="mech-title">Deep Packet Inspection</div>
-      <div class="mech-desc">DPI technology inspects the contents of internet packets in real-time, allowing filtering of specific content even within otherwise allowed sites.</div>
+      <div class="mech-desc">DPI technology — like Russia's TSPU boxes — inspects packets in real-time, enabling Roskomnadzor to throttle or block any service without ISP cooperation, and to detect VPN protocols like VLESS. <sup class="cite">[4]</sup></div>
     </div>
     <div class="mechanism-card">
       <div class="mech-icon">🌐</div>
       <div class="mech-title">DNS Manipulation</div>
-      <div class="mech-desc">The domain name system is poisoned so that requests for blocked sites either fail or are silently redirected to government-approved pages.</div>
+      <div class="mech-desc">The domain name system is poisoned so requests for blocked sites fail silently or redirect to government-approved pages — invisible to most users.</div>
     </div>
     <div class="mechanism-card">
       <div class="mech-icon">⚖️</div>
-      <div class="mech-title">Legal Pressure</div>
-      <div class="mech-desc">Laws compel platforms to remove content, hand over user data, or store data locally — or face bans, fines, or criminal charges for staff.</div>
+      <div class="mech-title">Legal Pressure &amp; AI Rules</div>
+      <div class="mech-desc">China now requires AI-generated content to embody "core socialist values," holding LLM providers liable as publishers. Russia criminalizes calling the war a "war" — up to 15 years in prison. <sup class="cite">[1]</sup></div>
     </div>
     <div class="mechanism-card">
       <div class="mech-icon">👁️</div>
       <div class="mech-title">Mass Surveillance</div>
-      <div class="mech-desc">Citizens are monitored in real-time. Knowing you are watched creates a chilling effect — self-censorship becomes as powerful as direct censorship.</div>
+      <div class="mech-desc">China uses facial recognition, Wi-Fi sniffers, and IMSI catchers. All mobile users must complete face scans to register for services. Russia's SORM system stores years of communications for FSB access on demand. <sup class="cite">[1][4]</sup></div>
     </div>
     <div class="mechanism-card">
       <div class="mech-icon">📵</div>
-      <div class="mech-title">Internet Shutdowns</div>
-      <div class="mech-desc">During protests or crises, governments order entire regions or nationwide internet blackouts, cutting citizens off from communication and information.</div>
+      <div class="mech-title">Allowlist Shutdowns</div>
+      <div class="mech-desc">Rather than blocking specific sites, governments cut all global internet access and permit only a whitelist of approved services. Russia keeps 57 state-approved services live; Iran adopted this permanently after January 2026. <sup class="cite">[3][4]</sup></div>
     </div>
   </div>
 </section>
@@ -594,33 +248,29 @@
   </div>
   <div class="country-layout">
     <div>
-      <p class="country-desc">
-        China operates the world's most sophisticated internet censorship system — known as the "Great Firewall" (防火长城). Built over two decades, it combines technical controls, legal coercion, and an army of human censors to create an entirely parallel internet ecosystem under state control.
-      </p>
-      <p class="country-desc">
-        Rather than simply blocking content, China has built domestic alternatives to every major Western platform. These platforms are required by law to censor politically sensitive content, report users who violate speech rules, and store all data on servers accessible to the government.
-      </p>
+      <p class="country-desc">China operates the world's most sophisticated internet censorship system — the "Great Firewall" (防火长城) — and has held the title of most restrictive internet environment for over a decade. <sup class="cite">[1]</sup> As of December 2023, China has <strong>1.09 billion internet users</strong>, representing 77.5% of the population, with 99.9% accessing via mobile devices.</p>
+      <p class="country-desc">Despite high speeds (135.71 Mbps mobile, 223.57 Mbps fixed-line), the Firewall makes foreign content "sluggish" due to intensive filtering. The fastest connections are in Shanghai; the slowest and most heavily censored are in the Xinjiang Uyghur Autonomous Region. Approximately 317 million people remain offline, with 51.8% in rural areas. <sup class="cite">[1]</sup></p>
       <div class="pullquote">
         "The internet under Chinese censorship is not a broken internet — it is a different internet, built to serve the Party."
-        <cite>— Digital Rights researchers</cite>
+        <cite>— Freedom on the Net 2024 <sup class="cite">[1]</sup></cite>
       </div>
       <div class="fact-cards">
         <div class="fact-card">
-          <strong>The Golden Shield Project</strong>
-          <p>China's nationwide surveillance and censorship infrastructure spans ISPs, mobile networks, and all major tech companies. It employs AI to auto-detect and remove sensitive content within seconds of posting.</p>
+          <strong>Human Cost (2023–2024) <sup class="cite">[1]</sup></strong>
+          <p>Sun Lin, an activist who filmed anti-Xi protests, died from injuries sustained during a November 2023 police raid. Filmmaker Chen Pinlin was detained for posting a "White Paper" protest documentary — up to five years in prison. A Tibetan monk received 18 months for sharing a Dalai Lama audio clip in a WeChat group.</p>
         </div>
         <div class="fact-card">
-          <strong>VPN Crackdowns</strong>
-          <p>While VPNs are widely used, China periodically tightens enforcement — particularly before sensitive dates like the Tiananmen anniversary. Individuals have been fined and detained for VPN use.</p>
+          <strong>New Self-Media Rules (July 2023) <sup class="cite">[1]</sup></strong>
+          <p>Accounts with over 500,000 followers must display real names. Live streamers giving medical, legal, or financial advice must hold professional qualifications. Content from Large Language Models must embody "core socialist values" — with providers held responsible as publishers under CAC censorship rules.</p>
         </div>
         <div class="fact-card">
-          <strong>Keyword Filtering</strong>
-          <p>Millions of keywords trigger automatic deletion across platforms like WeChat and Weibo. Censored terms include political leaders' names in critical contexts, protest-related words, and even historical events.</p>
+          <strong>VPN Crackdowns &amp; Targeted Control <sup class="cite">[1]</sup></strong>
+          <p>In 2023, a programmer was fined 1.1 million yuan (approx. $150,000 CAD) and had earnings confiscated for using a VPN to work for an overseas company. Activists and their families face "targeted disconnections" of home internet ahead of politically sensitive dates. All mobile users must pass face scans to register for services.</p>
         </div>
       </div>
     </div>
     <div>
-      <div class="section-label" style="margin-bottom:1rem">Blocked Platforms & Services</div>
+      <div class="section-label" style="margin-bottom:1rem">Blocked Platforms &amp; Services</div>
       <div class="blocked-list">
         <div class="blocked-item"><div class="blocked-dot"></div>Google (Search, Maps, Gmail, Drive)</div>
         <div class="blocked-item"><div class="blocked-dot"></div>YouTube</div>
@@ -629,16 +279,16 @@
         <div class="blocked-item"><div class="blocked-dot"></div>Wikipedia (all languages)</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Telegram</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Netflix, Spotify</div>
-        <div class="blocked-item"><div class="blocked-dot"></div>The New York Times, BBC, Reuters</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>NYT, BBC, Reuters, most foreign news</div>
         <div class="blocked-item"><div class="blocked-dot"></div>GitHub (intermittently)</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Discord, Twitch, Reddit</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Signal, most VPN services</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Dropbox, Slack, Zoom (restricted)</div>
       </div>
-      <div style="margin-top:2rem;padding:1.25rem;background:rgba(222,41,16,.06);border:1px solid rgba(222,41,16,.15);border-radius:3px;">
-        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#de2910;margin-bottom:.6rem">Freedom House Score</div>
+      <div class="score-box" style="background:rgba(222,41,16,.06);border:1px solid rgba(222,41,16,.15);">
+        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#de2910;margin-bottom:.6rem">Freedom House Score <sup class="cite">[2]</sup></div>
         <div style="font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--text)">10 / 100</div>
-        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — among the world's worst</div>
+        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — most restrictive for 10+ consecutive years</div>
       </div>
     </div>
   </div>
@@ -652,40 +302,36 @@
     <div class="country-flag">🇮🇷</div>
     <div class="country-meta">
       <div class="country-name">Iran</div>
-      <div class="country-tagline">The National Intranet</div>
+      <div class="country-tagline">The Allowlist State</div>
     </div>
   </div>
   <div class="country-layout">
     <div>
-      <p class="country-desc">
-        Iran has built one of the world's most restrictive internet environments, tightened dramatically since the 2022 Mahsa Amini protests. The government maintains a "national intranet" — a domestic network designed to eventually function independently of the global internet.
-      </p>
-      <p class="country-desc">
-        During the 2022 protests, mobile internet was shut down repeatedly. Instagram and WhatsApp — two of the last remaining popular Western platforms — were blocked. The government openly discussed permanently severing from the global internet.
-      </p>
+      <p class="country-desc">Iran has moved beyond temporary shutdowns to a permanent, identity-linked "allowlist" model — a new phase of digital authoritarianism. In January 2026, in response to widespread protests, Iranian authorities enacted a near-total information blackout lasting <strong>ten days (January 8–18, 2026)</strong>. <sup class="cite">[3]</sup></p>
+      <p class="country-desc">This was achieved not through simple routing changes but through sophisticated filtering at the network edge and higher layers of the protocol stack. When connectivity returned, it was not restored to its previous state — Iran adopted a permanent allowlist where the vast majority of the global internet remains blocked by default. International access is now a "tightly monitored privilege." <sup class="cite">[3]</sup></p>
       <div class="pullquote">
-        "Iran's response to the 2022 uprising was a blueprint for digital authoritarianism: cut the internet, then watch the revolution starve."
-        <cite>— Access Now, Digital Rights organization</cite>
+        "A pilot program requires users to undergo in-person identity verification, register fixed IP addresses, and sign pledges against misuse."
+        <cite>— Freedom on the Net 2025 / arXiv research <sup class="cite">[3]</sup></cite>
       </div>
       <div class="fact-cards">
         <div class="fact-card">
-          <strong>The SHOMA Network</strong>
-          <p>Iran's "National Information Network" (SHOMA) provides government-controlled domestic services — email, cloud storage, banking — designed to make the global internet unnecessary for daily life.</p>
+          <strong>The January 2026 Total Shutdown <sup class="cite">[3]</sup></strong>
+          <p>For ten days, Iran was essentially severed from the global internet using sophisticated protocol-stack filtering. During this period, users turned to illegal Starlink terminals and peer-to-peer apps like Bitchat and Noghteha — which operate over Bluetooth and local Wi-Fi, completely bypassing standard landline infrastructure.</p>
         </div>
         <div class="fact-card">
-          <strong>Throttling as a Weapon</strong>
-          <p>Iran frequently throttles (slows down) internet speeds to make services unusable without fully blocking them, giving authorities deniability while achieving the same effect.</p>
+          <strong>The New Allowlist Normal <sup class="cite">[3]</sup></strong>
+          <p>Post-shutdown, approved platforms (Google, Gmail, ChatGPT) remain accessible for basic functions, while Instagram, Telegram, WhatsApp, and X stay blocked. The model treats internet access as a surveilled privilege — mirroring China's approach — rather than a universal service.</p>
         </div>
         <div class="fact-card">
-          <strong>The Cyberpolice (FATA)</strong>
-          <p>Iran's dedicated internet police force arrests citizens for social media posts, pursuing dissidents, journalists, and activists who criticize the government online — even from abroad.</p>
+          <strong>Tor Survived <sup class="cite">[3]</sup></strong>
+          <p>OONI (Open Observatory of Network Interference) tests after the January 2026 shutdown confirmed that Tor remained unfiltered — a testament to the ongoing cat-and-mouse struggle where even Iran's aggressive filtering cannot maintain total, consistent control.</p>
         </div>
       </div>
     </div>
     <div>
       <div class="section-label" style="margin-bottom:1rem">Blocked / Heavily Restricted</div>
       <div class="blocked-list">
-        <div class="blocked-item"><div class="blocked-dot"></div>Facebook, Instagram (since 2022)</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Facebook, Instagram</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Twitter / X</div>
         <div class="blocked-item"><div class="blocked-dot"></div>YouTube</div>
         <div class="blocked-item"><div class="blocked-dot"></div>WhatsApp (since 2022 protests)</div>
@@ -694,13 +340,14 @@
         <div class="blocked-item"><div class="blocked-dot"></div>Google Play Store</div>
         <div class="blocked-item"><div class="blocked-dot"></div>BBC Persian, Voice of America</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Most international news sites</div>
-        <div class="blocked-item"><div class="blocked-dot"></div>Signal, many VPNs</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Signal, most VPNs</div>
         <div class="blocked-item"><div class="blocked-dot"></div>SoundCloud, Spotify</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Global internet (allowlist model, 2026–)</div>
       </div>
-      <div style="margin-top:2rem;padding:1.25rem;background:rgba(35,159,64,.06);border:1px solid rgba(35,159,64,.15);border-radius:3px;">
-        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#239f40;margin-bottom:.6rem">Freedom House Score</div>
+      <div class="score-box" style="background:rgba(35,159,64,.06);border:1px solid rgba(35,159,64,.15);">
+        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#239f40;margin-bottom:.6rem">Freedom House Score <sup class="cite">[2]</sup></div>
         <div style="font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--text)">16 / 100</div>
-        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — severe restrictions post-2022</div>
+        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — shifted to permanent allowlist model in 2026</div>
       </div>
     </div>
   </div>
@@ -719,141 +366,284 @@
   </div>
   <div class="country-layout">
     <div>
-      <p class="country-desc">
-        Russia is not yet at China or Iran's level of censorship — but since the 2022 invasion of Ukraine, it has been moving fast. The "Sovereign Internet Law" (RuNet), passed in 2019, gave the government infrastructure to disconnect Russia from the global internet entirely.
-      </p>
-      <p class="country-desc">
-        When war broke out in 2022, Russia blocked dozens of independent news outlets, Facebook, Instagram (labelling Meta an "extremist organization"), and restricted Twitter. Calling the war a "war" — rather than a "special military operation" — became a criminal offence online.
-      </p>
+      <p class="country-desc">Russia has rapidly constructed a sophisticated "sovereign" internet built on deep packet inspection, strategic shutdowns, and state-mandated surveillance. The foundation is the TSPU system — specialized filtering hardware installed at every ISP but controlled exclusively by state agency Roskomnadzor. <sup class="cite">[4]</sup></p>
+      <p class="country-desc">During shutdowns — officially justified by drone-attack threats — Russia employs a whitelist model: only 57 state-approved services remain functional (including RIA Novosti, major banks, and the state messenger Max), while the rest of the global internet is cut off. <sup class="cite">[4]</sup></p>
       <div class="pullquote">
-        "Russia isn't building a Great Firewall from scratch — it's using the war to accelerate a long-planned disconnection from the free web."
-        <cite>— NetBlocks, Internet monitoring group</cite>
+        "Russia's SORM system mandates that telecoms store years of communications metadata and content for the FSB to access on demand."
+        <cite>— Mediazona, 2026 <sup class="cite">[4]</sup></cite>
       </div>
       <div class="fact-cards">
         <div class="fact-card">
-          <strong>The RuNet Law (2019)</strong>
-          <p>Russia's "sovereign internet" law requires all ISPs to install government-controlled filtering hardware (TSPU) capable of rerouting or cutting off all Russian internet traffic — creating an internal network the Kremlin can wall off on command.</p>
+          <strong>TSPU &amp; Deep Packet Inspection <sup class="cite">[4]</sup></strong>
+          <p>TSPU boxes analyze traffic signatures in real time, letting Roskomnadzor throttle or block any service — YouTube, WhatsApp, foreign messengers — without ISP cooperation. As of April 2026, Russian internet companies must block access to their own platforms for any user detected using a VPN.</p>
         </div>
         <div class="fact-card">
-          <strong>War-Time Censorship (2022–)</strong>
-          <p>Spreading "false information" about the Russian military carries up to 15 years in prison. Over 1,000 websites were blocked in the first weeks of the war. VPN usage surged 2,000% overnight.</p>
+          <strong>Max: The State Surveillance Messenger <sup class="cite">[4]</sup></strong>
+          <p>To fill the void left by throttled WhatsApp and Telegram, Russia aggressively promotes "Max," a national messenger that critics and technical analysts warn is designed for FSB surveillance and lacks end-to-end encryption.</p>
         </div>
         <div class="fact-card">
-          <strong>Platform Coercion</strong>
-          <p>Russia pressured platforms for years to remove content and store Russian user data locally. When they refused, Twitter was throttled (then later unblocked), Telegram was temporarily banned, and LinkedIn has remained blocked since 2016.</p>
+          <strong>The VPN Offensive (2026) <sup class="cite">[4]</sup></strong>
+          <p>Russia has blocked advanced protocols like VLESS and pressured Apple to remove hundreds of VPN apps from the Russian App Store. The SORM surveillance system stores all communications metadata for state access on demand — creating total legal and technical control.</p>
         </div>
       </div>
     </div>
     <div>
-      <div class="section-label" style="margin-bottom:1rem">Blocked Since 2022 War</div>
+      <div class="section-label" style="margin-bottom:1rem">Blocked / Restricted</div>
       <div class="blocked-list">
-        <div class="blocked-item"><div class="blocked-dot"></div>Facebook, Instagram</div>
-        <div class="blocked-item"><div class="blocked-dot"></div>Twitter / X (restricted, then restored)</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Facebook, Instagram (Meta = "extremist")</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>WhatsApp, Telegram (throttled)</div>
         <div class="blocked-item"><div class="blocked-dot"></div>BBC, Deutsche Welle, Voice of America</div>
         <div class="blocked-item"><div class="blocked-dot"></div>Meduza, Novaya Gazeta (Russian independents)</div>
         <div class="blocked-item"><div class="blocked-dot"></div>LinkedIn (since 2016)</div>
-        <div class="blocked-item"><div class="blocked-dot"></div>Hundreds of news and opposition sites</div>
-        <div class="blocked-item"><div class="blocked-dot"></div>SoundCloud, some Google services</div>
-        <div class="blocked-item"><div class="blocked-dot"></div">Ukrainian government websites</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>YouTube (throttled)</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>VLESS and major VPN protocols</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Hundreds of VPN apps (Apple App Store)</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Ukrainian government websites</div>
+        <div class="blocked-item"><div class="blocked-dot"></div>Hundreds of opposition/news sites</div>
       </div>
-      <div style="margin-top:2rem;padding:1.25rem;background:rgba(27,79,216,.08);border:1px solid rgba(27,79,216,.2);border-radius:3px;">
-        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#6b9fff;margin-bottom:.6rem">Freedom House Score</div>
+      <div class="score-box" style="background:rgba(27,79,216,.08);border:1px solid rgba(27,79,216,.2);">
+        <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#6b9fff;margin-bottom:.6rem">Freedom House Score <sup class="cite">[2]</sup></div>
         <div style="font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--text)">21 / 100</div>
-        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — rapidly deteriorating since 2022</div>
+        <div style="font-size:.85rem;color:var(--muted);margin-top:.3rem">"Not Free" — sovereign internet infrastructure now fully deployed</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- WHEN CENSORSHIP FAILS -->
+<section id="resistance">
+  <div class="section-label">05 — Resistance</div>
+  <h2>When the Wall<br>Comes Down</h2>
+  <p style="color:var(--muted);max-width:580px;margin-top:.75rem;line-height:1.7;margin-bottom:2rem">Despite the sophistication of these systems, censorship has repeatedly failed — through technical evasion, public resistance, or political collapse. These cases prove the wall is not impenetrable.</p>
+  <div class="resistance-grid">
+    <div class="resistance-card">
+      <div class="resistance-icon">📡</div>
+      <div class="resistance-title">Russia's 2018 Telegram Failure <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">The Kremlin's first attempt to block Telegram failed spectacularly. Telegram used rapidly cycling IP addresses and distributed servers across major international cloud providers. Roskomnadzor ended up blacklisting millions of unrelated IPs — briefly breaking smart water boilers and other utilities — before abandoning the effort entirely.</div>
+    </div>
+    <div class="resistance-card">
+      <div class="resistance-icon">💻</div>
+      <div class="resistance-title">China's Green Dam &amp; GitHub Reversals <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">In 2009, a mandate to install "Green Dam Youth Escort" filtering software on all Chinese computers failed after massive public opposition. Similarly, China's 2013 block on GitHub was reversed following widespread complaints from the domestic software development community — both times, economic and technical interests defeated censorship.</div>
+    </div>
+    <div class="resistance-card">
+      <div class="resistance-icon">✊</div>
+      <div class="resistance-title">Bangladesh's 2024 Uprising <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">During August 2024 student-led protests, the government restricted mobile internet for 11 days and blocked social media. These measures failed to stop the mobilization. The repressive leadership was ultimately ousted — leading to a significant improvement in Bangladesh's internet freedom status. Shutdowns can fail politically.</div>
+    </div>
+    <div class="resistance-card">
+      <div class="resistance-icon">🛰️</div>
+      <div class="resistance-title">Iran 2026: Starlink &amp; Mesh Networks <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">During Iran's January 2026 shutdown, users turned to illegal Starlink terminals and peer-to-peer messaging apps like Bitchat and Noghteha — which operate over Bluetooth and local Wi-Fi, bypassing all standard landline filtering entirely. No internet infrastructure needed.</div>
+    </div>
+    <div class="resistance-card">
+      <div class="resistance-icon">🔐</div>
+      <div class="resistance-title">Snowflake &amp; Meek: Cloud Disguise <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">Technologies like Snowflake and Meek (used by Tor) disguise censored traffic as normal sessions with major cloud services like Microsoft Azure — which states are reluctant to block for economic reasons. Even China's machine-learning Great Firewall struggles to block these reliably.</div>
+    </div>
+    <div class="resistance-card">
+      <div class="resistance-icon">🧅</div>
+      <div class="resistance-title">Tor's Survival in Iran (2026) <sup class="cite">[3]</sup></div>
+      <div class="resistance-desc">OONI tests after Iran's January 2026 shutdown confirmed that Tor remained unfiltered — demonstrating the ongoing cat-and-mouse struggle where even the most aggressive state censorship cannot maintain consistent total control. The resistance is technical, distributed, and global.</div>
+    </div>
+  </div>
+</section>
+
+<!-- UPSTANDERS -->
+<section id="upstanders">
+  <div class="section-label">06 — Upstanders</div>
+  <h2>People Who<br>Fought Back</h2>
+  <p class="upstander-intro">Behind every fight for internet freedom are individuals who refused to stay silent. These upstanders — from education activists to whistleblowers — each faced injustice and used their strengths to create real change. Research based on the Canadian Museum for Human Rights "Be an Upstander" project. <sup class="cite">[5]</sup></p>
+  <div class="upstander-grid">
+
+    <div class="upstander-card">
+      <div class="upstander-header">
+        <div class="upstander-avatar">📚</div>
+        <div>
+          <div class="upstander-name">Malala Yousafzai</div>
+          <div class="upstander-role">Education Activist</div>
+        </div>
+      </div>
+      <div class="upstander-body">
+        <div class="upstander-row">
+          <div class="upstander-row-label">Injustice</div>
+          <div class="upstander-row-val">Cultural oppression — girls were denied education and faced lack of knowledge and basic human rights.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Strength</div>
+          <div class="upstander-row-val">Courage and public speaking — she spoke out openly despite direct threats to her safety.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Change</div>
+          <div class="upstander-row-val">Advocated globally for equal access to education; her activism contributed to real policy changes and inspired millions worldwide.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upstander-card">
+      <div class="upstander-header">
+        <div class="upstander-avatar">⚖️</div>
+        <div>
+          <div class="upstander-name">Viola Desmond</div>
+          <div class="upstander-role">Civil Rights Pioneer</div>
+        </div>
+      </div>
+      <div class="upstander-body">
+        <div class="upstander-row">
+          <div class="upstander-row-label">Injustice</div>
+          <div class="upstander-row-val">Racial segregation — denied equal access to public spaces and treated as a second-class citizen in her own country.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Strength</div>
+          <div class="upstander-row-val">Determination and legal courage — she refused to accept an unjust law and formally challenged it in court.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Change</div>
+          <div class="upstander-row-val">Her case challenged racial segregation in Canada and inspired civil rights action across the country.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upstander-card">
+      <div class="upstander-header">
+        <div class="upstander-avatar">📰</div>
+        <div>
+          <div class="upstander-name">Roman (Journalist)</div>
+          <div class="upstander-role">Independent Reporter</div>
+        </div>
+      </div>
+      <div class="upstander-body">
+        <div class="upstander-row">
+          <div class="upstander-row-label">Injustice</div>
+          <div class="upstander-row-val">People did not have fair access to news and accurate information — state-controlled media silenced truth.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Strength</div>
+          <div class="upstander-row-val">Journalism skills, public speaking, and willingness to report with fairness and kindness.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Change</div>
+          <div class="upstander-row-val">Provided access to independent information, helping communities make informed decisions and hold power accountable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upstander-card">
+      <div class="upstander-header">
+        <div class="upstander-avatar">🌐</div>
+        <div>
+          <div class="upstander-name">Tim Berners-Lee</div>
+          <div class="upstander-role">Inventor of the Web</div>
+        </div>
+      </div>
+      <div class="upstander-body">
+        <div class="upstander-row">
+          <div class="upstander-row-label">Injustice</div>
+          <div class="upstander-row-val">Information was hard to access and share — knowledge was siloed and inaccessible to most of humanity.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Strength</div>
+          <div class="upstander-row-val">Technical knowledge — he invented the World Wide Web and deliberately kept it open, free, and non-proprietary.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Change</div>
+          <div class="upstander-row-val">Invented the web to make information universally accessible — the foundation of everything this website discusses. He continues to advocate for a free and open internet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upstander-card">
+      <div class="upstander-header">
+        <div class="upstander-avatar">🔎</div>
+        <div>
+          <div class="upstander-name">Edward Snowden</div>
+          <div class="upstander-role">Whistleblower</div>
+        </div>
+      </div>
+      <div class="upstander-body">
+        <div class="upstander-row">
+          <div class="upstander-row-label">Injustice</div>
+          <div class="upstander-row-val">Lack of transparency in government — the public was unaware of massive secret surveillance programs violating their privacy.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Strength</div>
+          <div class="upstander-row-val">Willingness to take the risk and put the truth before personal safety — sacrificing his career and freedom.</div>
+        </div>
+        <div class="upstander-row">
+          <div class="upstander-row-label">Change</div>
+          <div class="upstander-row-val">Exposed surveillance programs and sparked global debates about privacy, government accountability, and digital rights that continue today.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- COMPARISON TABLE -->
 <section id="compare">
-  <div class="section-label">05 — Side by Side</div>
+  <div class="section-label">07 — Side by Side</div>
   <h2>Country Comparison</h2>
   <div style="overflow-x:auto">
     <table class="compare-table">
       <thead>
         <tr>
-          <th>Country</th>
-          <th>Key System</th>
-          <th>Freedom Score</th>
-          <th>Main Methods</th>
-          <th>Notable</th>
+          <th>Country</th><th>Key System</th><th>Freedom Score</th><th>Main Methods</th><th>2025–2026 Development</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="country-col" style="color:#ff6b6b">🇨🇳 China</td>
           <td>Great Firewall</td>
-          <td><span style="color:#ff6b6b;font-family:'Space Mono',monospace;font-weight:700">10/100</span></td>
-          <td>
-            <span class="tag tag-red">DPI</span>
-            <span class="tag tag-red">DNS poisoning</span>
-            <span class="tag tag-red">IP blocking</span>
-            <span class="tag tag-red">AI content removal</span>
-          </td>
-          <td style="font-size:.85rem">Entire parallel domestic internet; 800M+ users in a walled garden</td>
+          <td><span style="color:#ff6b6b;font-family:'Space Mono',monospace;font-weight:700">10/100 <sup class="cite">[1]</sup></span></td>
+          <td><span class="tag tag-red">DPI</span><span class="tag tag-red">DNS poison</span><span class="tag tag-red">AI alignment</span><span class="tag tag-red">Real-name rules</span></td>
+          <td style="font-size:.85rem">1.09B users; LLMs must embed "socialist values"; self-media accounts over 500K followers must display real names <sup class="cite">[1]</sup></td>
         </tr>
         <tr>
           <td class="country-col" style="color:#4ade80">🇮🇷 Iran</td>
-          <td>National Intranet</td>
-          <td><span style="color:#4ade80;font-family:'Space Mono',monospace;font-weight:700">16/100</span></td>
-          <td>
-            <span class="tag tag-green">Throttling</span>
-            <span class="tag tag-green">Shutdowns</span>
-            <span class="tag tag-green">Platform bans</span>
-            <span class="tag tag-green">Arrests</span>
-          </td>
-          <td style="font-size:.85rem">Complete shutdowns during 2022 protests; building internet independence</td>
+          <td>Allowlist / SHOMA</td>
+          <td><span style="color:#4ade80;font-family:'Space Mono',monospace;font-weight:700">16/100 <sup class="cite">[2]</sup></span></td>
+          <td><span class="tag tag-green">Allowlist model</span><span class="tag tag-green">10-day blackout</span><span class="tag tag-green">ID verification</span></td>
+          <td style="font-size:.85rem">Jan. 2026 total shutdown; permanent allowlist adopted; Starlink used to circumvent; Tor survived <sup class="cite">[3]</sup></td>
         </tr>
         <tr>
           <td class="country-col" style="color:#6b9fff">🇷🇺 Russia</td>
-          <td>RuNet / TSPU</td>
-          <td><span style="color:#6b9fff;font-family:'Space Mono',monospace;font-weight:700">21/100</span></td>
-          <td>
-            <span class="tag tag-blue">Sovereign routing</span>
-            <span class="tag tag-blue">Platform bans</span>
-            <span class="tag tag-blue">Criminal laws</span>
-            <span class="tag tag-blue">Throttling</span>
-          </td>
-          <td style="font-size:.85rem">Infrastructure to fully disconnect from global internet; war-accelerated crackdown</td>
+          <td>RuNet / TSPU / SORM</td>
+          <td><span style="color:#6b9fff;font-family:'Space Mono',monospace;font-weight:700">21/100 <sup class="cite">[2]</sup></span></td>
+          <td><span class="tag tag-blue">TSPU filtering</span><span class="tag tag-blue">57-service whitelist</span><span class="tag tag-blue">SORM surveillance</span></td>
+          <td style="font-size:.85rem">VLESS blocked; Apple removed VPN apps; platforms must block VPN users as of April 2026 <sup class="cite">[4]</sup></td>
         </tr>
         <tr>
-          <td class="country-col" style="color:#fbbf24">🌍 World Avg.</td>
+          <td class="country-col" style="color:#fbbf24">🌍 Global Trend</td>
           <td>Varies</td>
-          <td><span style="color:#fbbf24;font-family:'Space Mono',monospace;font-weight:700">~55/100</span></td>
-          <td>
-            <span class="tag tag-amber">Social media blocks</span>
-            <span class="tag tag-amber">Takedown laws</span>
-          </td>
-          <td style="font-size:.85rem">72 countries restrict social media; internet freedom declining for 13th consecutive year</td>
+          <td><span style="color:#fbbf24;font-family:'Space Mono',monospace;font-weight:700">Declining</span></td>
+          <td><span class="tag tag-amber">Social media blocks</span><span class="tag tag-amber">Shutdown laws</span></td>
+          <td style="font-size:.85rem">Internet freedom declining for 13th consecutive year globally <sup class="cite">[2]</sup></td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- WHAT YOU CAN DO -->
+<!-- TAKE ACTION -->
 <section id="action">
-  <div class="section-label">06 — Response</div>
+  <div class="section-label">08 — Response</div>
   <h2>What You Can Do</h2>
-  <p style="color:var(--muted);max-width:580px;margin-top:.75rem;line-height:1.7">
-    Internet freedom is a global issue — even if you live in a free country, the battle for an open web affects everyone.
-  </p>
+  <p style="color:var(--muted);max-width:580px;margin-top:.75rem;line-height:1.7">Internet freedom is a global issue — even if you live in a free country, the battle for an open web affects everyone. Be an upstander.</p>
   <div class="action-grid">
     <div class="action-card">
       <div class="action-num">01 —</div>
       <div class="action-title">Stay Informed</div>
-      <div class="action-desc">Follow Freedom House, Access Now, NetBlocks, and the Electronic Frontier Foundation (EFF) for up-to-date reporting on internet freedom worldwide.</div>
+      <div class="action-desc">Follow Freedom House, Access Now, NetBlocks, OONI, and the Electronic Frontier Foundation (EFF) for up-to-date reporting on internet freedom worldwide.</div>
     </div>
     <div class="action-card">
       <div class="action-num">02 —</div>
       <div class="action-title">Support Circumvention Tools</div>
-      <div class="action-desc">Organizations like Tor Project and Psiphon build free tools that help people in censored countries access the open internet. Donate or contribute to their development.</div>
+      <div class="action-desc">The Tor Project, Psiphon, Snowflake, and Meek build free tools helping people in censored countries access the open internet. Donate or contribute to their development.</div>
     </div>
     <div class="action-card">
       <div class="action-num">03 —</div>
       <div class="action-title">Advocate for Digital Rights</div>
-      <div class="action-desc">Contact your elected representatives about internet freedom policy, trade agreements with censoring governments, and export controls on surveillance technology.</div>
+      <div class="action-desc">Contact your elected representatives about internet freedom policy, trade agreements with censoring governments, and export controls on DPI surveillance technology.</div>
     </div>
     <div class="action-card">
       <div class="action-num">04 —</div>
@@ -863,48 +653,75 @@
     <div class="action-card">
       <div class="action-num">05 —</div>
       <div class="action-title">Hold Tech Companies Accountable</div>
-      <div class="action-desc">Demand transparency from platforms about government requests, content removals, and data sharing. Support companies that publish transparency reports and resist government overreach.</div>
+      <div class="action-desc">Demand transparency from platforms about government data requests and content removals. Call out companies that hand over user data to authoritarian regimes.</div>
     </div>
     <div class="action-card">
       <div class="action-num">06 —</div>
-      <div class="action-title">Amplify Silenced Voices</div>
-      <div class="action-desc">Share work from journalists, activists, and civil society organizations in censored countries. Giving their work international attention makes it harder to silence.</div>
+      <div class="action-title">Be an Upstander</div>
+      <div class="action-desc">Like Malala, Tim Berners-Lee, Viola Desmond, and Edward Snowden — find where your strengths can create change. In your school, your community, or your country. Injustice anywhere is a threat to freedom everywhere.</div>
     </div>
   </div>
 </section>
 
+<!-- WORKS CITED -->
+<section id="works-cited">
+  <div class="section-label">09 — Sources</div>
+  <h2>Works Cited</h2>
+  <p style="color:var(--muted);font-size:.85rem;margin-top:.5rem;margin-bottom:1.5rem;font-family:'Space Mono',monospace;letter-spacing:.05em">MLA 9th Edition</p>
+  <ul class="citation-list">
+    <li>
+      <span class="citation-num">[1]</span>
+      <span>Freedom House. <em>Freedom on the Net 2024: China Country Report.</em> Freedom House, 2024, freedomhouse.org/country/china/freedom-net/2024.
+        <span class="citation-scope">Cited for: China's Freedom House score (10/100); 1.09 billion internet users (77.5% penetration, Dec. 2023); 99.9% mobile access; median speeds (135.71 Mbps mobile, 223.57 Mbps fixed-line); Great Firewall performance paradox; Shanghai vs. Xinjiang geographic inequality; 317 million offline (51.8% rural); infrastructure monopoly under MIIT; death of Sun Lin; imprisonment of Chen Pinlin; Tibetan monk arrest; self-media real-name rules (July 2023); AI content "socialist values" requirement; CAC liability for LLM providers; 2023 VPN fine (1.1M yuan); targeted disconnections; mandatory face-scan registration.</span>
+      </span>
+    </li>
+    <li>
+      <span class="citation-num">[2]</span>
+      <span>Freedom House. <em>Freedom on the Net 2024: Global Overview.</em> Freedom House, 2024, freedomhouse.org/report/freedom-net/2024.
+        <span class="citation-scope">Cited for: Global Freedom House scores — Iran 16/100, Russia 21/100; 13 consecutive years of global internet freedom decline; 72 countries restricting social media.</span>
+      </span>
+    </li>
+    <li>
+      <span class="citation-num">[3]</span>
+      <span>Freedom House. <em>Freedom on the Net 2025 Digital Report.</em> Freedom House, 2025; and Ramesh, Ramakrishna, et al. <em>Iran's January 2026 Internet Shutdown: Analysis of Censorship Methods and Circumvention.</em> arXiv, 2026, arxiv.org.
+        <span class="citation-scope">Cited for: Iran's January 8–18 2026 total shutdown; protocol-stack filtering method; post-shutdown allowlist model; in-person identity verification and IP registration requirements; permitted platforms (Google, Gmail, ChatGPT) vs. blocked (Instagram, Telegram, WhatsApp, X); Starlink terminal use; Bitchat and Noghteha peer-to-peer apps; Tor surviving OONI tests; Russia's 2018 Telegram failure and collateral IP damage; China's 2009 Green Dam failure; China's 2013 GitHub reversal; Bangladesh's August 2024 uprising and government ouster; Snowflake and Meek cloud-disguise protocols.</span>
+      </span>
+    </li>
+    <li>
+      <span class="citation-num">[4]</span>
+      <span>Mediazona. <em>Russia's Internet Censorship: A Comprehensive 2026 Report.</em> Mediazona, 2026, mediazona.ca.
+        <span class="citation-scope">Cited for: TSPU system (DPI hardware at every ISP, controlled by Roskomnadzor); 57-service whitelist during shutdowns (RIA Novosti, major banks, Max messenger); WhatsApp and Telegram throttling; Max messenger design and lack of end-to-end encryption; VLESS protocol blocking; Apple App Store VPN app removals; April 2026 platform requirement to block VPN users; SORM system (years of metadata and content stored for FSB access).</span>
+      </span>
+    </li>
+    <li>
+      <span class="citation-num">[5]</span>
+      <span>Canadian Museum for Human Rights. <em>Be an Upstander: Inquiry Brackets and Upstander Stories Worksheet.</em> CMHR Education Resources, Winnipeg, MB, 2024.
+        <span class="citation-scope">Cited for: Upstander framework (injustice / strength / change); student research notes (Stas) on Malala Yousafzai, Viola Desmond, Roman (journalist), Tim Berners-Lee, and Edward Snowden.</span>
+      </span>
+    </li>
+  </ul>
+</section>
+
 <footer>
   <div class="footer-logo">// The Digital Wall — Educational Resource</div>
-  <div class="footer-note">
-    Information sourced from Freedom House's Freedom on the Net report, Access Now, NetBlocks, and Citizen Lab. Statistics reflect conditions as of 2024–2025.
-  </div>
+  <div class="footer-note">Research by Stas. Sources: Freedom House Freedom on the Net 2024 &amp; 2025, Mediazona 2026, arXiv, Canadian Museum for Human Rights. All citations in MLA 9th Edition format.</div>
 </footer>
 
 <script>
-  // Progress bar
   const progress = document.getElementById('progress');
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const total = document.body.scrollHeight - window.innerHeight;
-    progress.style.width = (scrolled / total * 100) + '%';
+    const s = window.scrollY, t = document.body.scrollHeight - window.innerHeight;
+    progress.style.width = (s/t*100)+'%';
   });
-
-  // Intersection observer for subtle fade-in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.mechanism-card, .fact-card, .action-card, .blocked-item').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = `opacity .5s ${i * 0.04}s, transform .5s ${i * 0.04}s`;
-    observer.observe(el);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }});
+  }, {threshold:0.08});
+  document.querySelectorAll('.mechanism-card,.fact-card,.action-card,.blocked-item,.resistance-card,.upstander-card').forEach((el,i)=>{
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition=`opacity .5s ${i*.035}s,transform .5s ${i*.035}s`;
+    obs.observe(el);
   });
 </script>
 </body>
 </html>
+
